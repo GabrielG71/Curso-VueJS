@@ -38,4 +38,31 @@ export default {
   font-weight: bold;
   margin: 0;
 }
+
+@media (max-width: 768px) {
+  #banner {
+    height: 500px;
+    justify-content: center;
+  }
+
+  .text-box {
+    margin-left: 0;
+    padding: 15px 20px;
+    text-align: center;
+  }
+
+  .text-box h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #banner {
+    height: 400px;
+  }
+
+  .text-box h1 {
+    font-size: 1.8rem;
+  }
+}
 </style>
