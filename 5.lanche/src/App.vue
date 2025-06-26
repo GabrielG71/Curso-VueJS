@@ -47,6 +47,15 @@ html, body {
 
 main {
   flex: 1;
-  padding: 20px;
+  padding: 0px;
+}
+
+main h1 {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #222;
 }
 </style>
