@@ -25,7 +25,6 @@
           </td>
           <td class="acoes">
             <select>
-              <option selected disabled>Selecione</option>
               <option value="1">Solicitado</option>
               <option value="2">Em produção</option>
               <option value="3">Realizado</option>
