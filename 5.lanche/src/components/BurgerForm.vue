@@ -1,25 +1,28 @@
 <template>
   <div id="BurgerForm">
-    <span>Componente de sucesso</span>
+    <Msg :mensagem="msg"  v-show="msg"/>
     <form id="Form" @submit.prevent="createBurger">
       <div id="input_container">
         <label for="name">Nome do Cliente:</label>
         <input type="text" v-model="nome" name="name" placeholder="Digite seu nome:" />
       </div>
+
       <div id="input_container">
         <label for="pao">Escolha o pão:</label>
         <select name="pao" id="pao" v-model="pao">
           <option disabled value="">Escolha seu pão</option>
-          <option v-for="p in paes" :key="p.id" :value="p.id">{{ p.tipo }}</option>
+          <option v-for="p in paes" :key="p.id" :value="p">{{ p.tipo }}</option>
         </select>
       </div>
+
       <div id="input_container">
         <label for="carne">Escolha a carne do seu burger:</label>
         <select name="carne" id="carne" v-model="carne">
           <option disabled value="">Escolha sua carne</option>
-          <option v-for="c in carnes" :key="c.id" :value="c.id">{{ c.tipo }}</option>
+          <option v-for="c in carnes" :key="c.id" :value="c">{{ c.tipo }}</option>
         </select>
       </div>
+
       <div id="input_container">
         <label>Selecione seus opcionais:</label>
       </div>
@@ -29,6 +32,7 @@
           {{ op.tipo }}
         </label>
       </div>
+
       <div id="input_container">
         <input type="submit" class="submitbtn" value="Criar meu Burger!" />
       </div>
@@ -37,6 +41,8 @@
 </template>
 
 <script>
+import Msg from './Msg.vue';
+
 export default {
   name: "BurgerForm",
   data() {
@@ -45,10 +51,13 @@ export default {
       carnes: [],
       opcionaisData: [],
       nome: "",
-      pao: "",
-      carne: "",
+      pao: null,
+      carne: null,
       opcional: [],
+      msg: "",
     };
+  }, components: {
+    Msg
   },
   methods: {
     async getIngredientes() {
@@ -59,17 +68,23 @@ export default {
         this.carnes = data.carnes || [];
         this.opcionaisData = data.opcionais || [];
       } catch (error) {
-        console.error(error);
+        console.error("Erro ao carregar ingredientes:", error);
       }
     },
     async createBurger() {
+      if (!this.nome || !this.pao || !this.carne) {
+        alert("Preencha todos os campos obrigatórios.");
+        return;
+      }
+
       const burger = {
         nome: this.nome,
-        pao: this.pao,
-        carne: this.carne,
+        pao: this.pao.tipo,
+        carne: this.carne.tipo,
         opcional: [...this.opcional],
         status: "Solicitado",
       };
+
       try {
         const response = await fetch("http://localhost:3000/burgers", {
           method: "POST",
@@ -78,13 +93,22 @@ export default {
           },
           body: JSON.stringify(burger),
         });
+
         await response.json();
+
         this.nome = "";
-        this.pao = "";
-        this.carne = "";
+        this.pao = null;
+        this.carne = null;
         this.opcional = [];
+
+        this.msg = "Pedido realizado com sucesso"
+
+        setTimeout(() => {
+                this.msg = ""    
+            }, 3000);
+
       } catch (error) {
-        console.error(error);
+        console.error("Erro ao criar burger:", error);
       }
     },
   },
