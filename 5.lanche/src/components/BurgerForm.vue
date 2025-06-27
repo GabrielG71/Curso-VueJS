@@ -8,26 +8,29 @@
             </div>
             <div id="input_container">
                 <label for="pao">Escolha o pão:</label>
-                <select name="pao" id="pao" v-model="pao">
-                    <option value="option">Escolha seu pão</option>
-                    <option value="integral">Pão Integral</option>
-                </select>
+                <select name="pao" id="pao" v-model="input_pao">
+                    <option disabled value="">Escolha seu pão</option>
+                    <option :value="pao.id" v-for="pao in paes" :key="pao.id" > {{ pao.tipo }} </option>
+            </select>
             </div>
+
             <div id="input_container">
                 <label for="carne">Escolha a carne do seu burger:</label>
-                <select name="carne" id="carne" v-model="carne">
-                    <option value="option">Escolha sua carne</option>
-                    <option value="integral">Maminha</option>
+                <select name="carne" id="carne" v-model="input_carne">
+                    <option disabled value="">Escolha sua carne</option>
+                    <option :value="carne.id" v-for="carne in carnes" :key="carne.id">{{ carne.tipo }}</option>
                 </select>
             </div>
             <div id="input_container">
                 <label for="optional">Selecione seus opcionais:</label>
             </div>
             <div id="input_container" class="checkbox-group">
-                <label><input type="checkbox" v-model="optional" /> Salame</label>
-                <label><input type="checkbox" v-model="optional" /> Salame</label>
-                <label><input type="checkbox" v-model="optional" /> Salame</label>
+                <label v-for="opcional in opcionaldata" :key="opcional.id">
+                    <input type="checkbox" :value="opcional.tipo" v-model="form_opcional" />
+                    {{ opcional.tipo }}
+                </label>
             </div>
+
 
             <div id="input_container">
                 <input type="submit" class="submitbtn" value="Criar meu Burger!">
@@ -39,7 +42,31 @@
 <script>
 
     export default {
-        name: "BurgerForm"
+        name: "BurgerForm",
+        data() {
+            return {
+                paes: null,
+                carnes: null,
+                opcionaldata: null,
+                nome: null,
+                pao: null,
+                carne: null,
+                opcional: [],
+                status: "Solicitado",
+                msg: null
+            }
+        }, methods: {
+            async getIngredientes(){
+                const req = await fetch("http://localhost:3000/ingredientes");
+                const data = await req.json();
+
+                this.paes = data.paes;
+                this.carnes = data.carnes;
+                this.opcionaldata = data.opcionais;
+            }
+        }, mounted() {
+            this.getIngredientes();
+        }
     }
 
 </script>
