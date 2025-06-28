@@ -12,24 +12,24 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>João</td>
-          <td>Pão de Trigo</td>
-          <td>Maminha</td>
+        <tr v-for="burger in burgers" :key="burger.id">
+          <td>{{ burger.id }}</td>
+          <td>{{ burger.nome }}</td>
+          <td>{{ burger.pao }}</td>
+          <td>{{ burger.carne }}</td>
           <td>
             <ul>
-              <li>Salame</li>
-              <li>Tomate</li>
+              <li v-for="(opcional, index) in burger.opcional" :key="index">{{ opcional }}</li>
             </ul>
           </td>
           <td class="acoes">
             <select>
-              <option value="1">Solicitado</option>
-              <option value="2">Em produção</option>
-              <option value="3">Realizado</option>
+              <option disabled value="">Selecione o Status</option>
+              <option v-for="s in status" :key="s.tipo" value="s.tipo" :selected="burger.status == s.tipo">
+                {{ s.tipo }}
+              </option>
             </select>
-            <button>Cancelar</button>
+            <button @click="deleteBurger(burger.id)">Cancelar</button>
           </td>
         </tr>
       </tbody>
@@ -40,6 +40,41 @@
 <script>
 export default {
   name: "Dashboard",
+  data(){
+    return{
+      burgers: null,
+      burger_id: null,
+      status: [],
+    }
+  }, methods: {
+    async getBurgers(){
+      const req = await fetch("http://localhost:3000/burgers");
+
+      const data = await req.json();
+
+      this.burgers = data;
+
+      this.getStatus();
+
+    }, async getStatus(){
+      const req = await fetch("http://localhost:3000/status");
+
+      const data = await req.json();
+
+      this.status = data;
+
+    }, async deleteBurger(id){
+      const req = await fetch(`http://localhost:3000/burgers/${id}`, {
+        method: "DELETE"
+      });
+
+      const res = await req.json();
+
+      this.getBurgers();
+    }
+  }, mounted(){
+    this.getBurgers();
+  }
 };
 </script>
 
@@ -105,5 +140,52 @@ button {
 
 button:hover {
   background-color: #444;
+}
+
+@media (max-width: 768px) {
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+    width: 100%;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody tr {
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+  }
+
+  tbody td {
+    padding: 10px 12px;
+    text-align: left;
+    position: relative;
+  }
+
+  tbody td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 12px;
+    top: 10px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  tbody td {
+    padding-left: 120px;
+    min-height: 40px;
+  }
+
+  select, button {
+    width: 100%;
+    margin: 10px 0 0;
+  }
 }
 </style>
