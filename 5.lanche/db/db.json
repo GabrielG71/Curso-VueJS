@@ -77,38 +77,5 @@
       "tipo": "Finalizado"
     }
   ],
-  "burgers": [
-    {
-      "id": "c23c",
-      "nome": "Gabriel",
-      "pao": "3 Queijos",
-      "carne": "Alcatra",
-      "opcional": [
-        "Cheddar"
-      ],
-      "status": "Solicitado"
-    },
-    {
-      "id": "d80f",
-      "nome": "Ana12",
-      "pao": "Parmesão e Orégano",
-      "carne": "Maminha",
-      "opcional": [
-        "Bacon",
-        "Tomate"
-      ],
-      "status": "Solicitado"
-    },
-    {
-      "id": "4a99",
-      "nome": "Ana12",
-      "pao": "3 Queijos",
-      "carne": "Alcatra",
-      "opcional": [
-        "Cheddar",
-        "Pepino"
-      ],
-      "status": "Solicitado"
-    }
-  ]
+  "burgers": []
 }
